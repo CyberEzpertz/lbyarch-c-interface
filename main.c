@@ -19,10 +19,9 @@ void writeImgFloatVals(int rows, int cols, double* img_float, char* filename) {
 		return;
 	}
 
-
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			fprintf(f, "%.2f\t", img_float[i * cols + j]);
+			fprintf(f, "%.4f\t", img_float[i * cols + j]);
 		}
 		fprintf(f, "\n");
 	}
@@ -106,7 +105,7 @@ int main() {
 				double rand_val = (double)rand() / (double)RAND_MAX;
 
 				if (j < 15) {
-					printf("%.2f\t", rand_val);
+					printf("%.4f\t", rand_val);
 				}
 				else if (j == 15) {
 					printf("...");
