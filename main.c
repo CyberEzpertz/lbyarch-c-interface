@@ -119,7 +119,7 @@ int main() {
 		};
 
 		printf("Generated values stored to 'generated_vals.txt'\n");
-		writeImgFloatVals(rows, cols, img_float, "generated_vals.txt");
+		writeImgFloatVals(rows, cols, img_float, "./out/generated_vals.txt");
 		break;
 	case 3:
 		for (int i = 0; i < rows; i++) {
@@ -149,7 +149,7 @@ int main() {
 	printIntValues(rows, cols, img_int);
 
 	// Print the results if they got truncated
-	writeImgVals(rows, cols, img_int, "c_output.txt");
+	writeImgVals(rows, cols, img_int, "./out/c_output.txt");
 
 	// Run multiple times to get ave. execution time for asm
 	for (int i = 0; i < 30; i++) {
@@ -163,7 +163,7 @@ int main() {
 	printIntValues(rows, cols, img_int);
 
 	// Print the results if they got truncated
-	writeImgVals(rows, cols, img_int, "asm_output.txt");
+	writeImgVals(rows, cols, img_int, "./out/asm_output.txt");
 
 	asm_exec_time /= 30;
 	c_exec_time /= 30;
