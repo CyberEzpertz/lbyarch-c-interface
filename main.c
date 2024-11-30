@@ -132,7 +132,7 @@ int main() {
 		break;
 	default:
 		printf("Invalid input. Exiting the program...");
-		return;
+		return 0;
 	}
 
 	printf("\n");
