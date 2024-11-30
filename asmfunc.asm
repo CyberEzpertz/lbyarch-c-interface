@@ -11,12 +11,10 @@ imgCvtGrayFloatToInt:
 	; count goes to rcx
 
 	xor rbx, rbx
-	
+	movsd xmm1, [multiplier]
 
 START:
-	
 	movsd xmm0, [rdx + rbx * 8]
-	movsd xmm1, [multiplier]
 
 	mulsd xmm0, xmm1
 	cvtsd2si rsi, xmm0
