@@ -65,7 +65,7 @@ From this we can infer that using C to interface with functions made in assembly
 ![image](https://github.com/user-attachments/assets/f93fb0b8-dea5-43bc-9901-66675ae8eaec)
 
 ### Case 2: Randomly Generate Values
-![image](https://github.com/user-attachments/assets/12393179-95dc-4a80-ba36-3a9c4c727758)
+![image](https://github.com/user-attachments/assets/e7a9967d-2b5f-418e-9f66-8154d8494fc2)
 
 ### Case 3: Generate matrix with 0.5 values
 ![image](https://github.com/user-attachments/assets/b79f0668-b53c-45d5-bc0e-ec6895d3fafd)
