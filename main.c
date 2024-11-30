@@ -11,6 +11,63 @@ void imgCvtGrayFloatToInt_C(int count, double* img_float, int* img_int) {
 	}
 }
 
+void writeImgFloatVals(int rows, int cols, double* img_float, char* filename) {
+	FILE* f = fopen(filename, "w");
+
+	if (f == NULL) {
+		printf("Error opening file\n");
+		return;
+	}
+
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			fprintf(f, "%.2f\t", img_float[i * cols + j]);
+		}
+		fprintf(f, "\n");
+	}
+
+	fclose(f);
+}
+
+void writeImgVals(int rows, int cols, int* img_int, char* filename) {
+	FILE* f = fopen(filename, "w");
+
+	if (f == NULL) {
+		printf("Error opening file\n");
+		return;
+	}
+
+	
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			fprintf(f, "%d\t", img_int[i * cols + j]);
+		}
+		fprintf(f, "\n");
+	}
+
+	fclose(f);
+}
+
+void printIntValues(int rows, int cols, int* img_int) {
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if (j > 14) {
+				printf("...");
+				break;
+			}
+			printf("%d\t", img_int[i * cols + j]);
+		}
+		printf("\n");
+
+		if (i > 14) {
+			printf("Check output files for complete results.\n\n");
+			break;
+		}
+	}
+}
+
 int main() {
 	clock_t start, end;
 	double asm_exec_time = 0;
@@ -43,16 +100,26 @@ int main() {
 		break;
 	case 2:
 		printf("===GENERATED VALUES===\n");
+
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				// Initialize with 0.5, the answers should be 128
 				double rand_val = (double)rand() / (double)RAND_MAX;
-				printf("%.2f\t", rand_val);
+
+				if (j < 15) {
+					printf("%.2f\t", rand_val);
+				}
+				else if (j == 15) {
+					printf("...");
+				}
+
 				img_float[i * cols + j] = rand_val;
 				img_int[i * cols + j] = 0;
 			}
 			printf("\n");
-		}
+		};
+
+		printf("Generated values stored to 'generated_vals.txt'\n");
+		writeImgFloatVals(rows, cols, img_float, "generated_vals.txt");
 		break;
 	case 3:
 		for (int i = 0; i < rows; i++) {
@@ -71,7 +138,7 @@ int main() {
 	printf("\n");
 
 	// Run multiple times to get ave. execution time for C
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 30; i++) {
 		start = clock();
 		imgCvtGrayFloatToInt_C(rows * cols, img_float, img_int);
 		end = clock();
@@ -79,30 +146,24 @@ int main() {
 	}
 
 	printf("===C RESULTS===\n");
+	printIntValues(rows, cols, img_int);
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			printf("%d\t", img_int[i * cols + j]);
-		}
-		printf("\n");
-	}
+	// Print the results if they got truncated
+	writeImgVals(rows, cols, img_int, "c_output.txt");
 
 	// Run multiple times to get ave. execution time for asm
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 30; i++) {
 		start = clock();
 		imgCvtGrayFloatToInt(rows * cols, img_float, img_int);
 		end = clock();
 		asm_exec_time += ((double)(end - start)) / CLOCKS_PER_SEC;
 	}
 
-	printf("===ASM RESULTS===\n");
+	printf("\n===ASM RESULTS===\n");
+	printIntValues(rows, cols, img_int);
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			printf("%d\t", img_int[i * cols + j]);
-		}
-		printf("\n");
-	}
+	// Print the results if they got truncated
+	writeImgVals(rows, cols, img_int, "asm_output.txt");
 
 	asm_exec_time /= 30;
 	c_exec_time /= 30;
@@ -110,8 +171,8 @@ int main() {
 	asm_exec_time *= 1000;
 	c_exec_time *= 1000;
 
-	printf("Average ASM Execution Time: %.4fms\n", asm_exec_time);
-	printf("Average C Execution Time: %.4fms\n", c_exec_time);
+	printf("Average ASM Execution Time (30 Runs): %.4fms\n", asm_exec_time);
+	printf("Average C Execution Time (30 Runs): %.4fms\n", c_exec_time);
 
 	free(img_float);
 	free(img_int);
