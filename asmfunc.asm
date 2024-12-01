@@ -9,6 +9,8 @@ global imgCvtGrayFloatToInt
 
 imgCvtGrayFloatToInt:
 	; count goes to rcx
+	; pointer to double array goes to rdx
+	; pointer to uint8_t array goes to r8
 
 	xor rbx, rbx
 	movsd xmm1, [multiplier]
@@ -19,9 +21,12 @@ START:
 	mulsd xmm0, xmm1
 	cvtsd2si rsi, xmm0
 
-	mov dword [r8 + rbx * 4], esi
+	mov byte [r8 + rbx], sil
 
 	inc rbx
 
-	LOOP START
+	cmp rbx, rcx
+	jl START
+
+
 ret

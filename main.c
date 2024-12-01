@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <stdint.h>
 
-extern void imgCvtGrayFloatToInt(int count, double* img_float, int* img_int);
+extern void imgCvtGrayFloatToInt(int count, double* img_float, uint8_t* img_int);
 
-void imgCvtGrayFloatToInt_C(int count, double* img_float, int* img_int) {
+void imgCvtGrayFloatToInt_C(int count, double* img_float, uint8_t* img_int) {
 	for (int i = 0; i < count; i++) {
-		img_int[i] = (int)(round(img_float[i] * 255));
+		img_int[i] = (uint8_t)(round(img_float[i] * 255));
 	}
 }
 
@@ -29,7 +30,7 @@ void writeImgFloatVals(int rows, int cols, double* img_float, char* filename) {
 	fclose(f);
 }
 
-void writeImgVals(int rows, int cols, int* img_int, char* filename) {
+void writeImgVals(int rows, int cols, uint8_t* img_int, char* filename) {
 	FILE* f = fopen(filename, "w");
 
 	if (f == NULL) {
@@ -40,7 +41,7 @@ void writeImgVals(int rows, int cols, int* img_int, char* filename) {
 	
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			fprintf(f, "%d\t", img_int[i * cols + j]);
+			fprintf(f, "%u\t", img_int[i * cols + j]);
 		}
 		fprintf(f, "\n");
 	}
@@ -48,7 +49,7 @@ void writeImgVals(int rows, int cols, int* img_int, char* filename) {
 	fclose(f);
 }
 
-void printIntValues(int rows, int cols, int* img_int) {
+void printIntValues(int rows, int cols, uint8_t* img_int) {
 
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
@@ -56,7 +57,7 @@ void printIntValues(int rows, int cols, int* img_int) {
 				printf("...");
 				break;
 			}
-			printf("%d\t", img_int[i * cols + j]);
+			printf("%u\t", img_int[i * cols + j]);
 		}
 		printf("\n");
 
@@ -69,15 +70,15 @@ void printIntValues(int rows, int cols, int* img_int) {
 
 int main() {
 	clock_t start, end;
-	double asm_exec_time = 0;
-	double c_exec_time = 0;
+	long double asm_exec_time = 0;
+	long double c_exec_time = 0;
 
 	int rows, cols;
 	printf("Enter the no. of rows and cols separated by space (e.g. '3 4'): ");
 	scanf_s("%d %d", &rows, &cols);
 
 	double* img_float = malloc((rows * cols) * sizeof(double));
-	int* img_int = malloc((rows * cols) * sizeof(int));
+	uint8_t* img_int = malloc((rows * cols) * sizeof(uint8_t));
 
 	int userInput = 0;
 
@@ -141,7 +142,7 @@ int main() {
 		start = clock();
 		imgCvtGrayFloatToInt_C(rows * cols, img_float, img_int);
 		end = clock();
-		c_exec_time += ((double)(end - start)) / CLOCKS_PER_SEC;
+		c_exec_time += ((long double)(end - start)) / CLOCKS_PER_SEC;
 	}
 
 	printf("===C RESULTS===\n");
@@ -155,7 +156,7 @@ int main() {
 		start = clock();
 		imgCvtGrayFloatToInt(rows * cols, img_float, img_int);
 		end = clock();
-		asm_exec_time += ((double)(end - start)) / CLOCKS_PER_SEC;
+		asm_exec_time += ((long double)(end - start)) / CLOCKS_PER_SEC;
 	}
 
 	printf("\n===ASM RESULTS===\n");
@@ -164,14 +165,14 @@ int main() {
 	// Print the results if they got truncated
 	writeImgVals(rows, cols, img_int, "./out/asm_output.txt");
 
-	asm_exec_time /= 30;
-	c_exec_time /= 30;
-
 	asm_exec_time *= 1000;
 	c_exec_time *= 1000;
 
-	printf("Average ASM Execution Time (30 Runs): %.4fms\n", asm_exec_time);
-	printf("Average C Execution Time (30 Runs): %.4fms\n", c_exec_time);
+	asm_exec_time /= 30;
+	c_exec_time /= 30;
+
+	printf("Average ASM Execution Time (30 Runs): %.4Lfms\n", asm_exec_time);
+	printf("Average C Execution Time (30 Runs): %.4Lfms\n", c_exec_time);
 
 	free(img_float);
 	free(img_int);
