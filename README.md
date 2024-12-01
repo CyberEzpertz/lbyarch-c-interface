@@ -69,3 +69,7 @@ From this we can infer that using C to interface with functions made in assembly
 
 ### Case 3: Generate matrix with 0.5 values
 ![image](https://github.com/user-attachments/assets/b79f0668-b53c-45d5-bc0e-ec6895d3fafd)
+
+## Demo Video
+The file was too large to upload to the GitHub repository or embed into the readme file, so the group uploaded it to Google Drive. Here's the link:
+[https://drive.google.com/file/d/1GmGXx8r9pEydxqQc0UokS2SUZdoZNSYc/view?usp=sharing](https://drive.google.com/file/d/1GmGXx8r9pEydxqQc0UokS2SUZdoZNSYc/view?usp=sharing)
